@@ -1,0 +1,31 @@
+.env
+
+# бинарники
+/bin/
+/out/
+/*.exe
+/*.exe~
+/*.dll
+/*.so
+/*.dylib
+
+# тестовые файлы
+*.test
+
+# кэш Go
+*.out
+*.log
+*.prof
+*.tmp
+
+# IDE/редакторы
+.idea/
+.vscode/
+*.swp
+
+# сгенерированные из proto
+*.pb.go
+
+# OS-specific
+.DS_Store
+Thumbs.db

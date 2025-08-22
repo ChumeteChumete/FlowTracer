@@ -1,0 +1,21 @@
+.env
+
+# игнорим .git
+.git
+.gitignore
+
+# IDE stuff
+.vscode
+.idea
+
+# локальные артефакты
+*.log
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# не тащим докер-компоуз внутрь
+docker-compose.yml
+docker/

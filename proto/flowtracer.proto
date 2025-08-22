@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package flowtracer;
+option go_package = "proto/flowtracerpb";
+
+message SendTransactionRequest {
+    string from_username = 1;
+    string to_username = 2;
+    int64 amount = 3;           // в копейках
+    string idempotency_key = 4;
+}
+
+message SendTransactionResponse {
+    bool accepted = 1;
+    string transaction_id = 2;
+    string message = 3;         // "accepted for processing"
+}
+
+message GetBalanceRequest {
+    string username = 1;
+}
+
+message GetBalanceResponse {
+    int64 balance = 1;          // в копейках
+    bool found = 2;
+}
+
+// Сервис
+service FlowTracerService {
+    rpc SendTransaction(SendTransactionRequest) returns (SendTransactionResponse);
+    rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse);
+}
+
