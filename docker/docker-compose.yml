@@ -32,27 +32,18 @@ services:
     image: confluentinc/cp-kafka:7.4.0
     container_name: flow_kafka
     environment:
-      # KRaft режим
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      
-      # Listeners
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      
-      # Кластер ID для KRaft
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
-      
-      # Автосоздание топиков
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_NUM_PARTITIONS: 3
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1
-      
-      # Директория логов
       KAFKA_LOG_DIRS: /var/lib/kafka/data
     ports:
       - "29092:29092"
@@ -64,6 +55,22 @@ services:
       timeout: 10s
       retries: 5
 
+  kafka-init:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - kafka
+    entrypoint:
+      - sh
+      - -c
+      - |
+        until kafka-topics --bootstrap-server kafka:9092 --list; do
+          echo "Waiting for Kafka..."
+          sleep 2
+        done
+        kafka-topics --create --bootstrap-server kafka:9092 --topic transactions --partitions 3 --replication-factor 1
+    networks:
+      - default
+
   kafdrop:
     image: obsidiandynamics/kafdrop
     container_name: flow_kafdrop
@@ -74,7 +81,6 @@ services:
     ports:
       - "9000:9000"
 
-  # Мой API Gateway сервер
   flowtracer-api:
     build: 
       context: ..
@@ -83,8 +89,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      kafka:
-        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
       redis:
         condition: service_healthy
     environment:
@@ -99,7 +105,6 @@ services:
       - "50051:50051"
     restart: unless-stopped
 
-  # Консьюмер
   flowtracer-consumer:
     build:
       context: ..

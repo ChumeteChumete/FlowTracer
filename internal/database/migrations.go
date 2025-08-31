@@ -22,7 +22,7 @@ var migrations = []Migration{
 			CREATE TABLE IF NOT EXISTS users (
 				id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 				username VARCHAR(100) UNIQUE NOT NULL,
-				balance DECIMAL(12,2) DEFAULT 0.00 CHECK (balance >= 0),
+				balance BIGINT DEFAULT 0 CHECK (balance >= 0),
 				created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 				updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 			);
@@ -36,7 +36,7 @@ var migrations = []Migration{
 				id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 				from_username VARCHAR(100) NOT NULL,
 				to_username VARCHAR(100) NOT NULL,
-				amount DECIMAL(12,2) NOT NULL CHECK (amount > 0),
+				amount BIGINT NOT NULL CHECK (amount > 0),
 				status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed', 'cancelled')),
 				idempotency_key VARCHAR(255) UNIQUE,
 				created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
