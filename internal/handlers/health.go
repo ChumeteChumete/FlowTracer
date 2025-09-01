@@ -42,7 +42,7 @@ func (h *HealthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	response := HealthResponse{
 		Status:   status,
 		Services: results,
-		Version:  "1.0.0", // Можно вынести в конфигурацию
+		Version:  "1.0.0", 
 		Uptime:   time.Since(startTime).String(),
 	}
 
@@ -51,7 +51,7 @@ func (h *HealthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *HealthHandler) LivenessCheck(w http.ResponseWriter, r *http.Request) {
-	// Простая проверка "живости" - всегда возвращает OK
+	// Всегда возвращает OK
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("OK"))
 }

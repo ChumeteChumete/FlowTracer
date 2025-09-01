@@ -16,6 +16,6 @@
 .DS_Store
 Thumbs.db
 
-# не тащим докер-компоуз внутрь
+# компоуз не тащим
 docker-compose.yml
 docker/

@@ -14,9 +14,11 @@ test:
 	go test ./...
 
 docker-up:
+	cd docker
 	docker-compose up -d
 
 docker-down:
+	cd docker
 	docker-compose down
 
 clean:

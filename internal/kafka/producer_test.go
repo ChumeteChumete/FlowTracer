@@ -25,7 +25,6 @@ func TestNewProducer(t *testing.T) {
 	})
 }
 
-// Если у вас есть функция SendTransactionEvent, можно добавить простой тест:
 func TestProducer_SendTransactionEvent_Validation(t *testing.T) {
 	// Тест параметров без реального Kafka подключения
 	tests := []struct {

@@ -76,7 +76,6 @@ func MetricsInterceptor() grpc.UnaryServerInterceptor {
 			grpcStatus := status.Convert(err)
 			code := grpcStatus.Code()
 			
-			// Здесь можно добавить метрики по методам и кодам ошибок
 			logger.WithFields(map[string]interface{}{
 				"method":   method,
 				"duration": duration,
